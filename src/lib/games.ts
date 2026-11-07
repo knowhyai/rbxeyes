@@ -21,6 +21,8 @@ export interface GameEditorial {
   navLabel: string;
   /** Small caps line above the H1. */
   eyebrow: string;
+  /** H1 text before the data-derived month; defaults to `${title} Codes`. */
+  heroTitle?: string;
   /** Hero intro paragraph (plain text). */
   intro: string;
   seoTitle: string;
@@ -31,10 +33,6 @@ export interface GameEditorial {
   redeemNote?: Callout;
   /** Intro line above the worth-trying section. */
   worthTryingIntro: string;
-  /** Empty-state line for the worth-trying section. */
-  worthTryingEmpty: string;
-  /** Empty-state line for the expired section (used when none recorded). */
-  expiredEmpty: string;
   faqs: FaqItem[];
   /** Ids of the two related games shown at the bottom of the page. */
   relatedIds: string[];
@@ -50,6 +48,7 @@ const animeEyes: GameRecord = {
   path: '/',
   navLabel: '+1 Anime Eyes',
   eyebrow: 'Roblox code tracker',
+  heroTitle: '+1 Anime Eyes Roblox Codes',
   intro:
     'We read three independent code guides for +1 Anime Eyes and list every code they agree is still redeemable — kyubi coins, eggs and boosts, with one-tap copy buttons and the exact reward wording each source printed. “Reported active” means exactly that: the sources listed it as working when we read them on 6 November 2026. We have never tested these codes in-game.',
   seoTitle: '+1 Anime Eyes Codes (November 2026) — Anime Eyes Roblox Codes',
@@ -69,10 +68,6 @@ const animeEyes: GameRecord = {
   },
   worthTryingIntro:
     'Codes that at least one source lists but we cannot call active in good faith — a spelling disagreement, a single source, or an expiry that lands right on our read date. Read each note before trying.',
-  worthTryingEmpty:
-    'Nothing uncertain right now. Every code in the table above was listed as active by all three sources on our last read (6 November 2026). When sources disagree or a code sits on an expiry boundary, it moves here instead of the main table.',
-  expiredEmpty:
-    'None of our sources listed expired +1 Anime Eyes codes on our read date (6 November 2026). If a code above fails, it most likely ended after the source pages were last updated — code lists can lag behind the game.',
   faqs: [
     {
       q: 'Are these +1 Anime Eyes codes tested in-game?',
@@ -92,7 +87,7 @@ const animeEyes: GameRecord = {
     },
     {
       q: 'What do UPDATE1 and NEWWORLDS actually give?',
-      a: 'MobileMatters (the newest source) lists both rewards only as “rewards”. Pro Game Guides describes UPDATE1 as a 2x Chakra boost (10 minutes) and NEWWORLDS as a 2x Trophy boost (10 minutes). We show the newest source’s wording in the table and note the fuller description here rather than silently merging the two.',
+      a: 'The table shows Pro Game Guides’ wording: UPDATE1 is a 2x Chakra boost (10 minutes) and NEWWORLDS is a 2x Trophy boost (10 minutes). MobileMatters — updated later, on 5 November 2026 — lists both rewards only as “rewards”, with no specifics. We use Pro Game Guides’ wording because it is the only source that names the reward at all; both sources and both dates stay on each code so you can judge either way.',
     },
     {
       q: 'When were these codes last checked?',
@@ -116,7 +111,7 @@ const aotr: GameRecord = {
   seoDescription:
     'All Attack on Titan Revolution (AOTR) codes reported for November 2026 — Spins, Potions, Emperor Keys and Gems, with copy buttons, source links and redemption steps. Reported by sources, never tested in-game.',
   redeemSteps: [
-    'Open Roblox and launch Attack on Titan Revolution (we have not verified an official game link, so search the game by name and check the title and developer before entering).',
+    'Open Roblox and launch Attack on Titan Revolution (use the game link below and check the title and creator match before redeeming).',
     'Select your save slot.',
     'From the main menu — before starting a run — open the Codes entry in the bottom-right corner.',
     'Paste a code exactly as printed above and confirm with Redeem. The reward is added to that save slot.',
@@ -129,9 +124,6 @@ const aotr: GameRecord = {
   },
   worthTryingIntro:
     'Codes we cannot honestly call active: FREECODE11 expires on our read date itself, and the two sources print the Halloween code with different spellings. Each entry explains exactly what is uncertain.',
-  worthTryingEmpty: 'Nothing uncertain right now.',
-  expiredEmpty:
-    'None recorded — on our read date (6 November 2026) our two sources listed no expired Attack on Titan Revolution codes. Codes move here as soon as a source marks them dead.',
   faqs: [
     {
       q: 'Are these Attack on Titan Revolution codes tested in-game?',
@@ -160,7 +152,7 @@ const aotr: GameRecord = {
   ],
   relatedIds: ['anime-eyes', 'steal-a-balut'],
   sourceNote:
-    'We did not verify an official Roblox game link for Attack on Titan Revolution, so none is shown — search the game by name in Roblox instead of trusting any link we might have guessed.',
+    'Game link: we opened the Roblox page at roblox.com/games/13379208636 on 7 November 2026 and its title read “Attack on Titan Revolution”, creator “AoTR [PI]” (also confirmed via Rolimons’ mirror of the same place ID). That is the extent of the verification — the title and creator match, nothing more.',
 };
 
 const stealABalut: GameRecord = {
@@ -175,7 +167,7 @@ const stealABalut: GameRecord = {
   seoDescription:
     'Steal a Balut Roblox codes for November 2026 — free Speed and Cash rewards with copy buttons, exact source links and redemption steps. Reported by sources, never tested in-game.',
   redeemSteps: [
-    'Open Roblox and launch Steal a Balut (we have not verified an official game link, so search the game by name and check the title before entering).',
+    'Open Roblox and launch Steal a Balut (use the game link below and check the title matches before redeeming).',
     'Tap the Shop button on the left side of the screen.',
     'Scroll to the bottom of the Shop to find the Codes section.',
     'Enter a code in exact capitals and press Redeem.',
@@ -188,10 +180,6 @@ const stealABalut: GameRecord = {
   },
   worthTryingIntro:
     'Codes we cannot call active in good faith — single-source listings, spelling conflicts or expiry dates landing on our read date.',
-  worthTryingEmpty:
-    'Nothing uncertain right now. All three codes above were listed as active by both sources on our last read (6 November 2026).',
-  expiredEmpty:
-    'None of our sources listed expired Steal a Balut codes on our read date (6 November 2026). If a code above fails, it most likely ended after the sources were last updated (4 November 2026).',
   faqs: [
     {
       q: 'Are these Steal a Balut codes tested in-game?',
@@ -211,6 +199,8 @@ const stealABalut: GameRecord = {
     },
   ],
   relatedIds: ['anime-eyes', 'aotr'],
+  sourceNote:
+    'Game link: we opened the Roblox page at roblox.com/games/90773083590844 on 7 November 2026 and its title read “Steal A Balut”, created by a Roblox group of the same name, and its description matches the codes we track (OG, BALUT, RELEASED). Verified to that extent only.',
 };
 
 export const GAMES: GameRecord[] = [animeEyes, aotr, stealABalut];

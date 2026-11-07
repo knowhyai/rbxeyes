@@ -59,6 +59,10 @@ html {
   color-scheme: dark;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* `clip` (not `hidden`) so long words can never cause page-wide horizontal
+     scroll on mobile without creating a scroll container that would break
+     the sticky site header. */
+  overflow-x: clip;
 }
 
 body {
@@ -491,6 +495,14 @@ a:hover {
   width: 100%;
 }
 
+/* On desktop the real table layout can exceed the column on narrow-ish
+   widths — scroll the table region, never the whole page. */
+@media (min-width: 760px) {
+  .table-scroll {
+    overflow-x: auto;
+  }
+}
+
 table.codes,
 table.expired {
   width: 100%;
@@ -740,7 +752,8 @@ td[data-label="Reward"] {
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  padding: 0.42rem 0.9rem;
+  padding: 0.5rem 0.95rem;
+  min-height: 2.5rem; /* comfortable touch target */
   border: 1px solid var(--mint-line);
   border-radius: 999px;
   background: transparent;
@@ -794,6 +807,7 @@ td[data-label="Reward"] {
 @media (max-width: 759px) {
   .copy-btn {
     width: 100%;
+    min-height: 2.75rem;
   }
 }
 
@@ -1135,4 +1149,79 @@ td[data-label="Reward"] {
   border-top: 1px solid var(--line);
   font-size: 0.8rem;
   color: var(--ink-2);
+}
+
+/* ---------- ad units ---------- */
+/* Placed only between page sections (never inside tables, never beside the
+   copy controls), always labelled, with generous surrounding space. The unit
+   itself renders nothing unless a valid publisher client AND slot were
+   configured at build time. */
+.ad-unit {
+  margin-block: clamp(2.5rem, 6vw, 4rem);
+  text-align: center;
+}
+
+.ad-label {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  margin-bottom: 0.55rem;
+}
+
+.ad-unit .adsbygoogle {
+  display: block;
+  max-width: 100%;
+  /* Reserve a little height so a filling unit doesn't jump the page. */
+  min-height: 90px;
+}
+
+/* ---------- 404 ---------- */
+.notfound-mark {
+  width: 4rem;
+  height: 4rem;
+  color: var(--mint-1);
+  margin-bottom: 1.5rem;
+}
+
+.notfound-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.notfound-link {
+  padding: 0.65rem 1.15rem;
+  border: 1px solid var(--mint-line);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--mint-1);
+  font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.notfound-link:hover {
+  background: var(--mint-3);
+  color: var(--mint-2);
+}
+
+/* ---------- legal links / terms ---------- */
+.legal-links {
+  margin-top: 1.1rem;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+
+.prose .terms-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.prose .terms-list li::marker {
+  color: var(--mint-1);
+  font-weight: 700;
 }

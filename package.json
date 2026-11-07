@@ -13,6 +13,7 @@
     "build": "node scripts/validate-data.mjs && astro build",
     "preview": "astro preview",
     "validate": "node scripts/validate-data.mjs",
+    "og": "node scripts/generate-og.mjs",
     "astro": "astro"
   },
   "dependencies": {

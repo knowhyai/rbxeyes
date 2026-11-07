@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ads } from '../lib/ads';
+---
+<BaseLayout
+  title="Privacy Policy — rbxeyes"
+  description="What rbxeyes does and doesn’t collect: a static Roblox code tracker with no accounts, no payments and no tracking of its own. Honest details on hosting logs and advertising."
+  path="/privacy/"
+>
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Privacy policy</p>
+      <h1 class="hero-title">What we collect: <span class="month">almost nothing</span></h1>
+      <p class="hero-lede">
+        rbxeyes is a static website. It has no accounts, no payments, no newsletters, no comment
+        forms and no analytics of our own. This page states plainly what little processing happens
+        and what we deliberately never do. Last updated 7 November 2026.
+      </p>
+    </div>
+  </section>
+
+  <section class="section container" id="basics">
+    <h2 class="section-title">The basics</h2>
+    <div class="section-body prose">
+      <ul>
+        <li><strong>No accounts, no payments.</strong> You cannot register, buy anything or pay us anything — there is nothing to buy. Redeem codes only inside the game’s own interface.</li>
+        <li><strong>No forms, no newsletters.</strong> The site has no way for you to type personal information into it, and we never ask for your Roblox password or credentials.</li>
+        <li><strong>No analytics or tracking of our own.</strong> We run no analytics scripts, no trackers and no profiling on this site.</li>
+        <li><strong>Hosting logs.</strong> Like any website, the hosting provider that serves these pages may keep short-lived technical server logs (such as IP address, request time and browser type) for security and abuse prevention. We don’t use them to profile anyone and we don’t sell or share them.</li>
+        <li><strong>Local clipboard use only.</strong> The “Copy” buttons copy a code to your clipboard on your device. Nothing is transmitted.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section container" id="advertising">
+    <h2 class="section-title">Advertising</h2>
+    <div class="section-body prose">
+      {
+        ads.enabled ? (
+          <>
+            <p>
+              This build of rbxeyes displays advertising served by <strong>Google AdSense</strong>.
+              Third-party vendors, including Google, use cookies (including the DoubleClick/DART
+              cookie) to serve ads based on your prior visits to this and other websites. Google’s
+              use of advertising cookies enables it and its partners to serve ads to you based on
+              your visit to this site and/or other sites on the internet.
+            </p>
+            <p>
+              You may opt out of personalized advertising by visiting{' '}
+              <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">
+                Google Ads Settings
+              </a>
+              , where you can turn off ad personalization for your Google account, and manage
+              vendor choices in your browser. We do <strong>not</strong> run our own consent
+              management platform — we have not implemented a cookie-consent tool of our own, and
+              we make no claim to one. Ad units are clearly labelled “Advertisement”.
+            </p>
+          </>
+        ) : (
+          <p>
+            <strong>This build of rbxeyes runs no advertising.</strong> It loads no ad scripts and
+            sets no advertising cookies. If a future build enables Google AdSense, this page will
+            say so here, describe Google’s use of advertising cookies, and link Google’s Ads
+            Settings page for opting out of personalized advertising — we won’t slip it in
+            silently.
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section container" id="independence">
+    <h2 class="section-title">Who we are (and are not)</h2>
+    <div class="section-body prose">
+      <p>
+        rbxeyes is an <strong>independent, unofficial fan-made tracker</strong>. It is not
+        affiliated with, endorsed by or sponsored by Roblox Corporation or any game developer or
+        publisher whose codes we track. All game names and trademarks belong to their respective
+        owners. We do not sell codes — every code listed is free to redeem inside the game that
+        offers it — and we run no Robux generators, giveaways or paid services of any kind.
+      </p>
+      <p>
+        Questions or privacy requests? Email us at{' '}
+        <a href="mailto:noaitell@knowhy.net">noaitell@knowhy.net</a>. Because we collect almost
+        nothing, there is rarely anything to delete, but we will answer honestly.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

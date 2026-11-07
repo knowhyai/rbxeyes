@@ -96,7 +96,9 @@ const statusNotes = [
         We keep the reward text <strong>verbatim</strong> from the most recent source. When two
         sources word the same reward differently — “4,000x Pumpkins” versus “4k Pumpkins”, or
         “Internal” versus “infernal” — we show the newer wording and note the older one on the code’s
-        details instead of inventing a merged version.
+        details instead of inventing a merged version. One documented exception: when the newest
+        source’s wording carries no specifics at all (say, just “rewards”), we show the newest
+        source that actually names the reward — and say exactly that on the code.
       </p>
     </div>
   </section>
@@ -129,6 +131,10 @@ const statusNotes = [
   <section class="section container" id="about-disclaimer">
     <div class="section-body">
       <Disclaimer gameTitle="the games we cover" />
+      <p class="legal-links">
+        <a href="/privacy/">Privacy policy</a> · <a href="/terms/">Terms of use</a> · contact:
+        <a href="mailto:noaitell@knowhy.net">noaitell@knowhy.net</a>
+      </p>
     </div>
   </section>
 </BaseLayout>

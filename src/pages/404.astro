@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import EyeLogo from '../components/EyeLogo.astro';
+import RelatedGames from '../components/RelatedGames.astro';
+import { GAMES } from '../lib/games';
+---
+<BaseLayout
+  title="Page not found — rbxeyes"
+  description="That page doesn’t exist. Jump to a Roblox code tracker below: +1 Anime Eyes, Attack on Titan Revolution (AOTR) or Steal a Balut."
+  path="/404"
+>
+  <section class="hero">
+    <div class="container notfound">
+      <span class="brand-mark notfound-mark"><EyeLogo size={44} /></span>
+      <p class="eyebrow">404 — page not found</p>
+      <h1 class="hero-title">This eye sees no such page</h1>
+      <p class="hero-lede">
+        The address you followed doesn’t exist on rbxeyes (or it moved). Nothing was lost —
+        the code trackers live here:
+      </p>
+      <div class="notfound-links">
+        {GAMES.map((game) => (
+          <a class="notfound-link" href={game.path}>
+            {game.navLabel} codes <span class="arrow-link">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" id="notfound-games">
+    <h2 class="section-title">Every tracker on this site</h2>
+    <p class="section-sub">
+      Manually maintained, sources cited, never tested in-game.
+    </p>
+    <div class="section-body">
+      <RelatedGames games={GAMES} />
+    </div>
+  </section>
+</BaseLayout>

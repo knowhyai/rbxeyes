@@ -1,0 +1,45 @@
+---
+/**
+ * AdSense-ready ad unit. Renders nothing at all unless BOTH a valid
+ * PUBLIC_ADSENSE_CLIENT and a valid slot id for this placement were
+ * configured at build time — no fake placeholders, no test ids, ever.
+ *
+ * The unit is always clearly labelled "Advertisement" and is placed only on
+ * its own between page sections (never inside tables or near copy buttons).
+ * The Google library script itself is loaded once in BaseLayout, and only
+ * when a valid client exists.
+ */
+import { ads } from '../lib/ads';
+
+interface Props {
+  /** Which configured slot this placement uses. */
+  slot: 'top' | 'bottom';
+}
+
+const { slot } = Astro.props;
+
+const unit = ads.enabled ? ads[slot] : null;
+const slotId = unit?.slotId ?? null;
+const client = ads.client;
+const insId = slotId && client ? `ad-ins-${slot}` : null;
+---
+{
+  insId && client && slotId ? (
+    <aside class="ad-unit" aria-label="Advertisement">
+      <p class="ad-label">Advertisement</p>
+      <ins
+        id={insId}
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={client}
+        data-ad-slot={slotId}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+      <script is:inline define:vars={{ insId }}>
+        // Fills the unit above: <ins id={insId}>
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+    </aside>
+  ) : null
+}

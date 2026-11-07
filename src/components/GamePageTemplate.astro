@@ -1,8 +1,10 @@
 ---
 /**
  * Shared template for every game page: hero with data-derived month,
- * reported-active table, worth-trying section, expired section,
- * redemption steps, FAQ, related games, sources and disclaimer.
+ * reported-active table, worth-trying and expired sections (rendered only
+ * when they have entries), redemption steps, FAQ, related games, sources
+ * and disclaimer. Optional ad units sit between sections — never inside a
+ * table and never next to the copy controls.
  */
 import HeroArt from './HeroArt.astro';
 import StatStrip from './StatStrip.astro';
@@ -13,6 +15,7 @@ import Faq from './Faq.astro';
 import RelatedGames from './RelatedGames.astro';
 import SourceList from './SourceList.astro';
 import Disclaimer from './Disclaimer.astro';
+import AdSlot from './AdSlot.astro';
 import type { GameRecord } from '../lib/games';
 import { codesByStatus, getRelatedGames } from '../lib/games';
 import { formatDate, formatMonthYear, plural } from '../lib/format';
@@ -28,19 +31,20 @@ const expired = codesByStatus(game, 'expired');
 const related = getRelatedGames(game);
 const monthYear = formatMonthYear(game.lastChecked);
 const lastRead = formatDate(game.lastChecked);
+const heroTitle = game.heroTitle ?? `${game.title} Codes`;
 ---
 <section class="hero">
   <HeroArt />
   <div class="container">
     <p class="eyebrow">{game.eyebrow}</p>
-    <h1 class="hero-title">{game.title} Codes <span class="month">({monthYear})</span></h1>
+    <h1 class="hero-title">{heroTitle} <span class="month">({monthYear})</span></h1>
     <p class="hero-lede">{game.intro}</p>
     <StatStrip game={game} />
     <nav class="jump-nav" aria-label="Jump to section">
       <span>Jump to:</span>
       <a href="#active">Reported active</a>
-      <a href="#worth-trying">Worth trying</a>
-      <a href="#expired">Expired</a>
+      {needsCheck.length > 0 && <a href="#worth-trying">Worth trying</a>}
+      {expired.length > 0 && <a href="#expired">Expired</a>}
       <a href="#redeem">How to redeem</a>
       <a href="#faq">FAQ</a>
       <a href="#sources">Sources</a>
@@ -63,45 +67,40 @@ const lastRead = formatDate(game.lastChecked);
   </div>
 </section>
 
-<section class="section container" id="worth-trying">
-  <h2 class="section-title">Worth trying (needs check)</h2>
-  <p class="section-sub">{game.worthTryingIntro}</p>
-  <div class="section-body">
-    {needsCheck.length > 0 ? (
+<div class="container">
+  <AdSlot slot="top" />
+</div>
+
+{needsCheck.length > 0 && (
+  <section class="section container" id="worth-trying">
+    <h2 class="section-title">Worth trying (needs check)</h2>
+    <p class="section-sub">{game.worthTryingIntro}</p>
+    <div class="section-body">
       <CodeTable
         codes={needsCheck}
         sources={game.sources}
         showStatus
         caption={`${game.title} codes that need checking, with the reason each is uncertain`}
       />
-    ) : (
-      <div class="callout callout--mint">
-        <p>{game.worthTryingEmpty}</p>
-      </div>
-    )}
-  </div>
-</section>
+    </div>
+  </section>
+)}
 
-<section class="section container" id="expired">
-  <h2 class="section-title">Expired codes</h2>
-  <p class="section-sub">
-    Listed as expired by our sources — kept for reference so you don’t waste attempts on them.
-    These are shown for history only; we don’t expect them to grant anything.
-  </p>
-  <div class="section-body">
-    {expired.length > 0 ? (
+{expired.length > 0 && (
+  <section class="section container" id="expired">
+    <h2 class="section-title">Expired codes</h2>
+    <p class="section-sub">
+      Listed as expired by our sources — kept for reference so you don’t waste attempts on them.
+      These are shown for history only; we don’t expect them to grant anything.
+    </p>
+    <div class="section-body">
       <ExpiredTable
         codes={expired}
         caption={`Expired ${game.title} codes kept for reference, as of ${lastRead}`}
       />
-    ) : (
-      <div class="callout">
-        <p class="callout-title">None recorded</p>
-        <p>{game.expiredEmpty}</p>
-      </div>
-    )}
-  </div>
-</section>
+    </div>
+  </section>
+)}
 
 <section class="section container" id="redeem">
   <h2 class="section-title">How to redeem {game.title} codes</h2>
@@ -122,6 +121,10 @@ const lastRead = formatDate(game.lastChecked);
     )}
   </div>
 </section>
+
+<div class="container">
+  <AdSlot slot="bottom" />
+</div>
 
 <section class="section container" id="faq">
   <h2 class="section-title">{game.title} codes — questions</h2>
