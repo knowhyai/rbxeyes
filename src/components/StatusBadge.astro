@@ -1,0 +1,18 @@
+---
+import type { CodeStatus } from '../lib/types';
+
+interface Props {
+  status: CodeStatus;
+}
+const { status } = Astro.props;
+
+const labels: Record<CodeStatus, string> = {
+  active: 'Reported active',
+  'needs-check': 'Needs check',
+  expired: 'Expired',
+};
+---
+<span class={`badge badge--${status}`}>
+  <span class="badge-dot" aria-hidden="true"></span>
+  {labels[status]}
+</span>

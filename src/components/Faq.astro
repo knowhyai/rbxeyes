@@ -1,0 +1,16 @@
+---
+import type { FaqItem } from '../lib/types';
+
+interface Props {
+  faqs: FaqItem[];
+}
+const { faqs } = Astro.props;
+---
+<div class="faq">
+  {faqs.map((faq, index) => (
+    <details class="faq-item" open={index === 0}>
+      <summary>{faq.q}</summary>
+      <p class="faq-a">{faq.a}</p>
+    </details>
+  ))}
+</div>

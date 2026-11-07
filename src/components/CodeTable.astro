@@ -1,0 +1,86 @@
+---
+import CopyButton from './CopyButton.astro';
+import StatusBadge from './StatusBadge.astro';
+import type { GameCode, SourceRef } from '../lib/types';
+import { sourceShortName } from '../lib/games';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  codes: GameCode[];
+  /** The game's source registry, used to resolve per-code source URLs. */
+  sources: SourceRef[];
+  /** Show the status badge next to the code (used in the worth-trying table). */
+  showStatus?: boolean;
+  /** Hidden caption for screen readers. */
+  caption: string;
+}
+
+const { codes, sources, showStatus = false, caption } = Astro.props;
+
+const byUrl = new Map(sources.map((source) => [source.url, source]));
+
+const rows = codes.map((entry) => ({
+  entry,
+  refs: entry.sources
+    .map((url) => byUrl.get(url))
+    .filter((source): source is SourceRef => source !== undefined),
+}));
+---
+<div class="table-scroll">
+  <table class="codes">
+    <caption class="sr-only">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="col-code">Code</th>
+        <th scope="col">Reward</th>
+        <th scope="col" class="col-copy">Copy</th>
+        <th scope="col" class="col-sources">Sources</th>
+        <th scope="col" class="col-details">Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map(({ entry, refs }) => (
+        <tr id={`code-${entry.code}`}>
+          <td data-label="Code" class="col-code">
+            <code class="code-chip">{entry.code}</code>
+            {showStatus && (
+              <div class="badge-slot">
+                <StatusBadge status={entry.status} />
+              </div>
+            )}
+          </td>
+          <td data-label="Reward">{entry.reward}</td>
+          <td data-label="Copy" class="col-copy">
+            <CopyButton code={entry.code} />
+          </td>
+          <td data-label="Sources" class="col-sources">
+            <span class="src-short">{refs.map((ref) => sourceShortName(ref)).join(', ')}</span>
+          </td>
+          <td data-label="Details" class="col-details">
+            <details class="code-details">
+              <summary>Details</summary>
+              <div class="code-details-body">
+                {entry.note && <p>{entry.note}</p>}
+                <ul>
+                  {refs.map((ref) => (
+                    <li>
+                      <a href={ref.url} target="_blank" rel="noopener noreferrer">{ref.name}</a>
+                      {' — '}
+                      {ref.dateKind === 'published' ? 'published' : 'updated'} {formatDate(ref.updated)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .badge-slot {
+    margin-top: 0.55rem;
+  }
+</style>

@@ -1,0 +1,42 @@
+---
+import type { GameCode } from '../lib/types';
+
+interface Props {
+  codes: GameCode[];
+  caption: string;
+}
+const { codes, caption } = Astro.props;
+---
+<div class="table-scroll">
+  <table class="expired">
+    <caption class="sr-only">{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="col-code">Code</th>
+        <th scope="col">Reward (as listed)</th>
+        <th scope="col">Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      {codes.map((entry) => (
+        <tr id={`expired-${entry.code}`}>
+          <td data-label="Code" class="col-code">
+            <code class="code-chip code-chip--dead">{entry.code}</code>
+          </td>
+          <td data-label="Reward (as listed)">{entry.reward}</td>
+          <td data-label="Note">{entry.note}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .code-chip--dead {
+    border-color: var(--line-strong);
+    background: rgba(236, 233, 225, 0.04);
+    color: var(--ink-1);
+    text-decoration: line-through;
+    text-decoration-color: rgba(240, 144, 158, 0.55);
+  }
+</style>

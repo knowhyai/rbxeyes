@@ -1,0 +1,91 @@
+---
+/**
+ * Accessible copy button with a polite live region and explicit failure
+ * feedback: if the Clipboard API and the legacy fallback both fail, the
+ * button says so and the live region points users at the selectable code
+ * text in the table (manual copy always remains possible).
+ */
+interface Props {
+  code: string;
+}
+const { code } = Astro.props;
+---
+<button class="copy-btn" type="button" data-code={code} aria-label={`Copy code ${code} to clipboard`}>
+  <svg class="ic ic-copy" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+    <rect x="5.75" y="5.75" width="8" height="8" rx="1.75" stroke="currentColor" stroke-width="1.6" />
+    <path d="M10.25 3.5V3a1.5 1.5 0 0 0-1.5-1.5H3A1.5 1.5 0 0 0 1.5 3v5.75a1.5 1.5 0 0 0 1.5 1.5h.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+  </svg>
+  <svg class="ic ic-check" viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+    <path d="M2.75 8.5 6.25 12l7-8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  <span class="copy-btn-label">Copy</span>
+  <span class="copy-live sr-only" role="status" aria-live="polite"></span>
+</button>
+
+<script>
+  const RESET_MS = 2400;
+  const timers = new WeakMap<HTMLButtonElement, number>();
+
+  type CopyState = 'idle' | 'copied' | 'error';
+
+  function setLabel(btn: HTMLButtonElement, state: CopyState): void {
+    const label = btn.querySelector('.copy-btn-label');
+    btn.classList.toggle('is-copied', state === 'copied');
+    btn.classList.toggle('is-error', state === 'error');
+    if (label) {
+      label.textContent = state === 'copied' ? 'Copied' : state === 'error' ? 'Copy failed' : 'Copy';
+    }
+  }
+
+  function announce(btn: HTMLButtonElement, message: string): void {
+    const live = btn.querySelector('.copy-live');
+    if (live) live.textContent = message;
+  }
+
+  async function writeClipboard(text: string): Promise<boolean> {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Clipboard API blocked (e.g. insecure context) or denied — try the legacy path.
+      try {
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.top = '-1000px';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        area.setSelectionRange(0, text.length);
+        const ok = document.execCommand('copy');
+        area.remove();
+        return ok;
+      } catch {
+        return false;
+      }
+    }
+  }
+
+  async function handleCopy(btn: HTMLButtonElement): Promise<void> {
+    const code = btn.dataset.code ?? '';
+    const ok = await writeClipboard(code);
+    setLabel(btn, ok ? 'copied' : 'error');
+    announce(
+      btn,
+      ok
+        ? `Code ${code} copied to clipboard.`
+        : `Copy failed. The code ${code} is selectable in the table — select it and copy it manually.`,
+    );
+    const existing = timers.get(btn);
+    if (existing) window.clearTimeout(existing);
+    timers.set(btn, window.setTimeout(() => setLabel(btn, 'idle'), RESET_MS));
+  }
+
+  document.addEventListener('click', (event: Event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const btn = target.closest('.copy-btn');
+    if (btn instanceof HTMLButtonElement) void handleCopy(btn);
+  });
+</script>

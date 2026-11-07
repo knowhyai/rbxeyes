@@ -1,0 +1,29 @@
+---
+/**
+ * The rbxeyes eye mark — a stylized anime-style eye with a mint iris.
+ * Decorative only: always rendered with aria-hidden.
+ */
+interface Props {
+  size?: number;
+}
+const { size = 30 } = Astro.props;
+---
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 48 48"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path
+    d="M4.5 24C11.5 12.8 19 8.6 24 8.6S36.5 12.8 43.5 24C36.5 35.2 29 39.4 24 39.4S11.5 35.2 4.5 24Z"
+    stroke="currentColor"
+    stroke-width="2.4"
+    stroke-linejoin="round"
+  />
+  <circle cx="24" cy="24" r="8.6" stroke="currentColor" stroke-width="2.2" />
+  <circle cx="24" cy="24" r="4.6" fill="currentColor" />
+  <circle cx="20.6" cy="20.4" r="1.5" fill="#0b0f0e" />
+  <path d="M9.5 13.5 12 16M38.5 13.5 36 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+</svg>

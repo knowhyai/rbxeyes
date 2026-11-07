@@ -1,0 +1,48 @@
+---
+/**
+ * Large decorative eye artwork for page heroes.
+ * Purely ornamental: aria-hidden, never carries information.
+ */
+---
+<svg
+  class="hero-art"
+  viewBox="0 0 400 250"
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <!-- orbit ring -->
+  <circle cx="252" cy="118" r="118" stroke="currentColor" stroke-opacity="0.16" stroke-width="1" stroke-dasharray="3 7" />
+  <circle cx="252" cy="118" r="94" stroke="currentColor" stroke-opacity="0.1" stroke-width="1" stroke-dasharray="1 6" />
+
+  <!-- eye outline -->
+  <path
+    d="M92 118C138 46 218 38 252 38s114 22 114 80c0 58-80 80-114 80s-114-8-160-80Z"
+    stroke="currentColor"
+    stroke-opacity="0.5"
+    stroke-width="2"
+    stroke-linejoin="round"
+    transform="translate(-30 0)"
+  />
+  <!-- lash rays -->
+  <path
+    d="M120 52 132 66M198 34 202 52M290 44 280 60M352 78 336 88"
+    stroke="currentColor"
+    stroke-opacity="0.35"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- iris rings -->
+  <circle cx="222" cy="118" r="52" stroke="currentColor" stroke-opacity="0.45" stroke-width="2" />
+  <circle cx="222" cy="118" r="40" stroke="currentColor" stroke-opacity="0.18" stroke-width="1" stroke-dasharray="4 5" />
+  <circle cx="222" cy="118" r="28" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.5" />
+  <!-- pupil -->
+  <circle cx="222" cy="118" r="13" fill="currentColor" fill-opacity="0.5" />
+  <circle cx="214" cy="110" r="4" fill="currentColor" fill-opacity="0.9" />
+
+  <!-- sparkles -->
+  <path d="M330 150 334 160 344 164 334 168 330 178 326 168 316 164 326 160Z" fill="currentColor" fill-opacity="0.4" />
+  <path d="M118 176 121 183 128 186 121 189 118 196 115 189 108 186 115 183Z" fill="currentColor" fill-opacity="0.3" />
+  <circle cx="86" cy="86" r="2.5" fill="currentColor" fill-opacity="0.35" />
+</svg>

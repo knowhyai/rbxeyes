@@ -1,0 +1,24 @@
+---
+import type { GameRecord } from '../lib/games';
+import { countActive, countNeedsCheck } from '../lib/games';
+import { formatMonthYear, plural } from '../lib/format';
+
+interface Props {
+  games: GameRecord[];
+}
+const { games } = Astro.props;
+---
+<div class="grid-2">
+  {games.map((game) => (
+    <a class="game-card" href={game.path}>
+      <span class="game-card-eyebrow">Roblox codes · {formatMonthYear(game.lastChecked)}</span>
+      <span class="game-card-title">{game.title} codes</span>
+      <span class="game-card-meta">
+        {plural(countActive(game), 'reported active code')}
+        {' · '}
+        {plural(countNeedsCheck(game), 'worth trying')}
+        <span class="arrow-link"> →</span>
+      </span>
+    </a>
+  ))}
+</div>

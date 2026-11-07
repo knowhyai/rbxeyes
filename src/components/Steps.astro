@@ -1,0 +1,15 @@
+---
+/**
+ * Numbered step list — used for redemption walkthroughs and, on the About
+ * page, for describing our manual process.
+ */
+interface Props {
+  steps: string[];
+  label?: string;
+}
+const { steps, label } = Astro.props;
+---
+{label && <h3 class="sr-only">{label}</h3>}
+<ol class="steps">
+  {steps.map((step) => <li>{step}</li>)}
+</ol>

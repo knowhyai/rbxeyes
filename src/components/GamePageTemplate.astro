@@ -1,0 +1,162 @@
+---
+/**
+ * Shared template for every game page: hero with data-derived month,
+ * reported-active table, worth-trying section, expired section,
+ * redemption steps, FAQ, related games, sources and disclaimer.
+ */
+import HeroArt from './HeroArt.astro';
+import StatStrip from './StatStrip.astro';
+import CodeTable from './CodeTable.astro';
+import ExpiredTable from './ExpiredTable.astro';
+import Steps from './Steps.astro';
+import Faq from './Faq.astro';
+import RelatedGames from './RelatedGames.astro';
+import SourceList from './SourceList.astro';
+import Disclaimer from './Disclaimer.astro';
+import type { GameRecord } from '../lib/games';
+import { codesByStatus, getRelatedGames } from '../lib/games';
+import { formatDate, formatMonthYear, plural } from '../lib/format';
+
+interface Props {
+  game: GameRecord;
+}
+const { game } = Astro.props;
+
+const active = codesByStatus(game, 'active');
+const needsCheck = codesByStatus(game, 'needs-check');
+const expired = codesByStatus(game, 'expired');
+const related = getRelatedGames(game);
+const monthYear = formatMonthYear(game.lastChecked);
+const lastRead = formatDate(game.lastChecked);
+---
+<section class="hero">
+  <HeroArt />
+  <div class="container">
+    <p class="eyebrow">{game.eyebrow}</p>
+    <h1 class="hero-title">{game.title} Codes <span class="month">({monthYear})</span></h1>
+    <p class="hero-lede">{game.intro}</p>
+    <StatStrip game={game} />
+    <nav class="jump-nav" aria-label="Jump to section">
+      <span>Jump to:</span>
+      <a href="#active">Reported active</a>
+      <a href="#worth-trying">Worth trying</a>
+      <a href="#expired">Expired</a>
+      <a href="#redeem">How to redeem</a>
+      <a href="#faq">FAQ</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</section>
+
+<section class="section container" id="active">
+  <h2 class="section-title">Reported active codes</h2>
+  <p class="section-sub">
+    Listed as working by every source we cite below, as of our last read on {lastRead}.
+    <strong>“Reported active” means the sources said so — we have not tested these codes in-game.</strong>
+  </p>
+  <div class="section-body">
+    <CodeTable
+      codes={active}
+      sources={game.sources}
+      caption={`Reported active ${game.title} codes with rewards and sources, as of ${lastRead}`}
+    />
+  </div>
+</section>
+
+<section class="section container" id="worth-trying">
+  <h2 class="section-title">Worth trying (needs check)</h2>
+  <p class="section-sub">{game.worthTryingIntro}</p>
+  <div class="section-body">
+    {needsCheck.length > 0 ? (
+      <CodeTable
+        codes={needsCheck}
+        sources={game.sources}
+        showStatus
+        caption={`${game.title} codes that need checking, with the reason each is uncertain`}
+      />
+    ) : (
+      <div class="callout callout--mint">
+        <p>{game.worthTryingEmpty}</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="section container" id="expired">
+  <h2 class="section-title">Expired codes</h2>
+  <p class="section-sub">
+    Listed as expired by our sources — kept for reference so you don’t waste attempts on them.
+    These are shown for history only; we don’t expect them to grant anything.
+  </p>
+  <div class="section-body">
+    {expired.length > 0 ? (
+      <ExpiredTable
+        codes={expired}
+        caption={`Expired ${game.title} codes kept for reference, as of ${lastRead}`}
+      />
+    ) : (
+      <div class="callout">
+        <p class="callout-title">None recorded</p>
+        <p>{game.expiredEmpty}</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="section container" id="redeem">
+  <h2 class="section-title">How to redeem {game.title} codes</h2>
+  {game.gameUrl && (
+    <p class="section-sub">
+      Game page ({game.gameUrlCredit?.toLowerCase()}):
+      <a href={game.gameUrl} target="_blank" rel="noopener noreferrer">open on Roblox</a>
+      — check the title matches before redeeming.
+    </p>
+  )}
+  <div class="section-body">
+    <Steps steps={game.redeemSteps} label={`How to redeem codes in ${game.title}`} />
+    {game.redeemNote && (
+      <div class={`callout callout--${game.redeemNote.tone}`}>
+        <p class="callout-title">{game.redeemNote.title}</p>
+        <p>{game.redeemNote.body}</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<section class="section container" id="faq">
+  <h2 class="section-title">{game.title} codes — questions</h2>
+  <p class="section-sub">
+    Exact case, failures, requirements and what “reported active” really means for this game.
+  </p>
+  <div class="section-body">
+    <Faq faqs={game.faqs} />
+  </div>
+</section>
+
+<section class="section container" id="related">
+  <h2 class="section-title">Related Roblox code trackers</h2>
+  <p class="section-sub">
+    We also track {plural(related.length, 'other game')} with the same rules — sources cited,
+    disagreements kept in the open.
+  </p>
+  <div class="section-body">
+    <RelatedGames games={related} />
+  </div>
+</section>
+
+<section class="section container" id="sources">
+  <h2 class="section-title">Sources &amp; read dates</h2>
+  <p class="section-sub">
+    These are the pages we read to compile this list. Open them to double-check anything —
+    that is exactly what we would do.
+  </p>
+  <div class="section-body">
+    <SourceList game={game} />
+  </div>
+</section>
+
+<section class="section container" id="disclaimer">
+  <div class="section-body">
+    <Disclaimer gameTitle={game.title} />
+  </div>
+</section>

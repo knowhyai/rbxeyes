@@ -1,0 +1,37 @@
+---
+import EyeLogo from './EyeLogo.astro';
+import { GAMES, SITE_LAST_READ } from '../lib/games';
+import { formatDate } from '../lib/format';
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="/" aria-label="rbxeyes home">
+          <span class="brand-mark"><EyeLogo size={24} /></span>
+          <span class="brand-word">rbx<em>eyes</em></span>
+        </a>
+        <p class="footer-tag">
+          An independent, manually maintained Roblox code tracker. Statuses are reported by the
+          sources cited on each page — never tested in-game, never automatic.
+        </p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <h3>Pages</h3>
+        {GAMES.map((game) => (
+          <a href={game.path}>{game.navLabel} codes</a>
+        ))}
+        <a href="/about/">About &amp; method</a>
+      </nav>
+      <div class="footer-meta">
+        <h3>Honesty</h3>
+        <p>Data as of {formatDate(SITE_LAST_READ)}.</p>
+        <p>No accounts. No payments. No Robux generators. Not affiliated with Roblox Corporation or any game developer.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 rbxeyes — an unofficial fan-made tracker.</span>
+      <span>Codes can expire at any time; redemption results are never certain.</span>
+    </div>
+  </div>
+</footer>

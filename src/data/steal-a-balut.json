@@ -1,0 +1,58 @@
+{
+  "id": "steal-a-balut",
+  "title": "Steal a Balut",
+  "lastChecked": "2026-11-06",
+  "sources": [
+    {
+      "name": "GGRecon",
+      "short": "GGRecon",
+      "url": "https://www.ggrecon.com/guides/all-steal-a-balut-codes-to-redeem-free-cash-speed/",
+      "updated": "2026-11-04"
+    },
+    {
+      "name": "Dexerto",
+      "short": "Dexerto",
+      "url": "https://www.dexerto.com/roblox/steal-a-balut-codes-3424664/",
+      "updated": "2026-11-04",
+      "dateKind": "published"
+    }
+  ],
+  "codes": [
+    {
+      "code": "OG",
+      "reward": "1,000 Speed and $100,000 Cash",
+      "status": "active",
+      "note": "GGRecon's wording, shown here. Dexerto lists the same contents phrased “1,000 Speed $100,000 Cash” (no “and”). Same reward either way.",
+      "sources": [
+        "https://www.ggrecon.com/guides/all-steal-a-balut-codes-to-redeem-free-cash-speed/",
+        "https://www.dexerto.com/roblox/steal-a-balut-codes-3424664/"
+      ],
+      "lastChecked": "2026-11-06",
+      "sourceUpdated": ["2026-11-04"]
+    },
+    {
+      "code": "BALUT",
+      "reward": "500 Speed",
+      "status": "active",
+      "note": "Both sources list this identically.",
+      "sources": [
+        "https://www.ggrecon.com/guides/all-steal-a-balut-codes-to-redeem-free-cash-speed/",
+        "https://www.dexerto.com/roblox/steal-a-balut-codes-3424664/"
+      ],
+      "lastChecked": "2026-11-06",
+      "sourceUpdated": ["2026-11-04"]
+    },
+    {
+      "code": "RELEASED",
+      "reward": "$25,000 Cash",
+      "status": "active",
+      "note": "GGRecon words it “$25,000 Cash”; Dexerto lists “$25,000”. Same reward either way.",
+      "sources": [
+        "https://www.ggrecon.com/guides/all-steal-a-balut-codes-to-redeem-free-cash-speed/",
+        "https://www.dexerto.com/roblox/steal-a-balut-codes-3424664/"
+      ],
+      "lastChecked": "2026-11-06",
+      "sourceUpdated": ["2026-11-04"]
+    }
+  ]
+}

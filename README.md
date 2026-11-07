@@ -1,2 +1,132 @@
-# rbxeyes
-rbxeyes.com — Roblox redeem codes site. Homepage: Anime Eyes codes; inner pages for AOTR and Steal a Balut.
+# rbxeyes.com
+
+An honest, manually maintained **Roblox redeem-code tracker**. Static site, no accounts, no
+payments, no Robux generators — just code lists with sources, read dates and disagreements
+kept in the open.
+
+- **Home (`/`)** — +1 Anime Eyes codes (primary SEO target: "anime eyes roblox codes", "+1 anime eyes codes")
+- **`/codes-for-aotr/`** — Attack on Titan Revolution (AOTR) codes
+- **`/steal-a-balut-codes/`** — Steal a Balut codes
+- **`/about/`** — how the manual checking works and what we never claim
+
+> **Status: local first version.** Nothing has been deployed. No domain has been purchased,
+> pointed or configured — `SITE_URL` defaults to `https://rbxeyes.com` so canonical URLs,
+> the sitemap and robots.txt all assume that origin (see [Domain note](#domain-note)).
+
+## Stack
+
+| Piece         | Choice                                              |
+| ------------- | --------------------------------------------------- |
+| Framework     | [Astro](https://astro.build) v5 (stable), static output |
+| Language      | TypeScript (strict)                                 |
+| Package manager | pnpm (pinned via `packageManager` in package.json) |
+| Integrations  | `@astrojs/sitemap` only — no other runtime deps     |
+| Output        | Fully static HTML in `dist/` (Cloudflare Pages-ready) |
+| Assets        | Inline SVG only — no image files, no external asset dependencies |
+
+## Quick start
+
+Prerequisites: Node 20+ and pnpm (corepack: `corepack enable`).
+
+```sh
+pnpm install        # install dependencies
+pnpm dev            # dev server at http://localhost:4321
+pnpm validate       # validate src/data/*.json only
+pnpm build          # validate data, then build static site into dist/
+pnpm preview        # serve the built dist/ locally
+```
+
+## Configuration
+
+`SITE_URL` is the single origin used for `<link rel="canonical">`, Open Graph URLs, the
+sitemap and the generated `robots.txt`. Default: `https://rbxeyes.com`.
+
+```sh
+SITE_URL=https://preview.example.org pnpm build   # build for another origin
+```
+
+It can also be put in `.env` (see `.env.example`).
+
+## Project structure
+
+```
+src/
+  data/                  # one JSON per game — THE code data (edit these)
+    anime-eyes.json
+    aotr.json
+    steal-a-balut.json
+  lib/
+    types.ts             # shared types for the JSON schema
+    games.ts             # game registry: JSON + editorial copy (intros, steps, FAQs, SEO)
+    format.ts            # deterministic date helpers (never read the clock)
+  components/            # typed, reusable .astro components
+  layouts/BaseLayout.astro
+  pages/                 # 4 routes + robots.txt endpoint
+  styles/global.css      # design system (dark editorial, mint accent, responsive tables)
+scripts/validate-data.mjs  # data precheck, runs before every build
+public/favicon.svg
+```
+
+## Updating code data
+
+Edit the game's JSON in `src/data/`. Each code entry looks like this:
+
+```json
+{
+  "code": "UPDATE2",
+  "reward": "15 kyubi coins",
+  "status": "active",
+  "note": "Pro Game Guides words it “15 Kurama Coins, 2x Chakra boost (5 minutes)”.",
+  "sources": ["https://…", "https://…"],
+  "lastChecked": "2026-11-06",
+  "sourceUpdated": ["2026-11-05", "2026-11-02"]
+}
+```
+
+| Field           | Meaning                                                                 |
+| --------------- | ----------------------------------------------------------------------- |
+| `code`          | Exact code string as printed by the source — never altered              |
+| `reward`        | Reward text **verbatim** from the most recent source — never invented or merged |
+| `status`        | `active` \| `needs-check` \| `expired` (see rules below)                |
+| `note`          | Discrepancies, expiry dates, requirements. Required for `needs-check`   |
+| `sources`       | URLs of this game's sources (must exist in the game's `sources` array)  |
+| `lastChecked`   | The date **you actually read** the sources (ISO `YYYY-MM-DD`)           |
+| `sourceUpdated` | The sources' own published/updated dates — must match the referenced sources' dates |
+
+**Rules (enforced by `pnpm validate` where machine-checkable, by discipline elsewhere):**
+
+1. Never invent a code, a reward or an expiry date. If no source printed it, it doesn't exist here.
+2. `active` requires **at least two independent sources** agreeing the code works (the validator warns otherwise).
+3. Single-source codes, spelling conflicts between sources, or expiries landing on the read date go to `needs-check`, with the uncertainty spelled out in `note`.
+4. `expired` only when a source explicitly says so (or lists it in their expired section).
+5. Keep disagreements in `note` — show the newer source's wording verbatim, mention the older one; don't merge reward texts.
+6. Set `lastChecked`/`sourceUpdated` honestly. The H1 month and every "last read" line come from these dates — never from the build clock, and nothing auto-updates them.
+7. When a source disappears or a new one is adopted, update the game's `sources` array and `SOURCE.md` together.
+
+Editorial copy (intros, redemption steps, FAQs, SEO titles) lives in `src/lib/games.ts`.
+
+## Data validation
+
+`scripts/validate-data.mjs` runs automatically before every build (`pnpm build`) and checks:
+required fields and types, the status enum, `https` URLs, ISO dates, no duplicate codes,
+source references resolve, per-code `lastChecked` matches the game's, per-code `sourceUpdated`
+matches the referenced sources' dates, `needs-check` entries carry an explanatory note, and
+the two-source rule for `active` (as a warning). It never touches the network — checking is
+manual by design.
+
+## Deploying later (informational)
+
+The build output is a fully static `dist/` directory suitable for any static host. For
+Cloudflare Pages: build command `pnpm build`, output directory `dist`. Deployment, domain
+purchase and DNS are intentionally out of scope for this first version.
+
+## Domain note
+
+`rbxeyes.com` is the intended origin and the default in `SITE_URL`, but **the domain has not
+been bought, pointed or configured anywhere**. Until it is real, canonical tags, the sitemap
+and robots.txt reference it on trust — override `SITE_URL` if you host this build anywhere else.
+
+## Research log
+
+Every source page and research URL used to seed the data, with read dates, publication dates
+and all known discrepancies, is documented in [`SOURCE.md`](./SOURCE.md).

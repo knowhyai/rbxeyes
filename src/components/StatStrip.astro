@@ -1,0 +1,25 @@
+---
+import type { GameRecord } from '../lib/games';
+import { countActive, countExpired, countNeedsCheck } from '../lib/games';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  game: GameRecord;
+}
+const { game } = Astro.props;
+
+const stats = [
+  { value: String(countActive(game)), label: 'Reported active' },
+  { value: String(countNeedsCheck(game)), label: 'Worth trying' },
+  { value: String(countExpired(game)), label: 'Expired' },
+  { value: formatDate(game.lastChecked), label: 'Last read' },
+];
+---
+<ul class="stat-strip" role="list">
+  {stats.map((stat) => (
+    <li class="stat">
+      <span class="stat-value">{stat.value}</span>
+      <span class="stat-label">{stat.label}</span>
+    </li>
+  ))}
+</ul>

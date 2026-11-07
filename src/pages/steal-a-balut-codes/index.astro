@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GamePageTemplate from '../../components/GamePageTemplate.astro';
+import { getGame } from '../../lib/games';
+
+const game = getGame('steal-a-balut');
+---
+<BaseLayout title={game.seoTitle} description={game.seoDescription} path={game.path} faqs={game.faqs}>
+  <GamePageTemplate game={game} />
+</BaseLayout>

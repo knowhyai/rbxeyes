@@ -1,0 +1,22 @@
+{
+  "name": "rbxeyes",
+  "version": "0.1.0",
+  "description": "rbxeyes.com — an honest, manually maintained Roblox redeem-code tracker. Static site built with Astro.",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/validate-data.mjs && astro build",
+    "preview": "astro preview",
+    "validate": "node scripts/validate-data.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.0",
+    "astro": "^5.0.0"
+  }
+}

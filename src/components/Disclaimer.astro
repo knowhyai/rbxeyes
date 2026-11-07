@@ -1,0 +1,17 @@
+---
+interface Props {
+  gameTitle: string;
+}
+const { gameTitle } = Astro.props;
+---
+<aside class="disclaimer" aria-label="Disclaimer">
+  <p>
+    <strong>Disclaimer.</strong> rbxeyes is an independent tracker and is not affiliated with
+    Roblox Corporation or the developers of {gameTitle} — nothing on this page is official.
+    Every code is <strong>reported by the sources listed above</strong>: “active” means those
+    sources listed the code as still redeemable when we read them, and codes are
+    <strong>never tested in-game by us</strong>. Redeem codes through the game’s own interface only;
+    we will never ask for your password, and we don’t run Robux generators, giveaways or paid
+    services of any kind. Codes can expire at any time without notice.
+  </p>
+</aside>

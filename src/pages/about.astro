@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroArt from '../components/HeroArt.astro';
+import Steps from '../components/Steps.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import RelatedGames from '../components/RelatedGames.astro';
+import Disclaimer from '../components/Disclaimer.astro';
+import { GAMES, SITE_LAST_READ } from '../lib/games';
+import { formatDate } from '../lib/format';
+
+const checkedSteps = [
+  'On a given day, we open several independent code pages for a game — at least two, from different publishers.',
+  'We read what they say code by code: the exact code string, the reward text, any expiry date and any requirement.',
+  'A code is listed as “reported active” only when at least two independent sources agree it currently works. Agreement is about the code working — reward wording can still differ, and those differences are noted on the code itself, never silently merged.',
+  'Codes with a single source, conflicting spellings, or an expiry that lands on our read date go to “worth trying” with the exact uncertainty spelled out.',
+  'We record the read date and each source’s own updated date on every page — that is the “last read” you see, never a build timestamp.',
+];
+
+const statusNotes = [
+  {
+    status: 'active' as const,
+    title: 'Reported active',
+    body: 'At least two independent sources listed the code as still redeemable when we read them. That is the entire claim — it says nothing about our own gameplay.',
+  },
+  {
+    status: 'needs-check' as const,
+    title: 'Needs check / worth trying',
+    body: 'Something is uncertain: sources disagree on the spelling, only one source lists it, or its expiry lands on our read date. Each entry says exactly what is uncertain so you can decide whether to try it.',
+  },
+  {
+    status: 'expired' as const,
+    title: 'Expired',
+    body: 'At least one source explicitly lists the code as expired or removed. We keep these visible for reference — a code listed nowhere is a code you cannot check against anything.',
+  },
+];
+---
+<BaseLayout
+  title="About rbxeyes — How We Track Roblox Codes Honestly"
+  description="How rbxeyes manually checks Roblox code lists, what “reported active” means, our two-source rule, and what this independent tracker will never claim."
+  path="/about/"
+>
+  <section class="hero">
+    <HeroArt />
+    <div class="container">
+      <p class="eyebrow">About rbxeyes</p>
+      <h1 class="hero-title">A code tracker that tells you <span class="month">exactly how it knows</span></h1>
+      <p class="hero-lede">
+        rbxeyes is a small, manually maintained tracker for Roblox redeem codes. We don’t claim to
+        be official, we don’t automatically verify anything, and we never test codes in-game.
+        What we do is read independent code guides, agree or disagree openly, and show our work.
+      </p>
+    </div>
+  </section>
+
+  <section class="section container" id="how">
+    <h2 class="section-title">How we check codes</h2>
+    <p class="section-sub">
+      Everything on this site starts with a human opening source pages and reading them.
+      There is no bot, no scraper refreshing anything behind the scenes, and no automatic
+      re-checking — if a page looks current, that is because a person last read it, not a cron job.
+    </p>
+    <div class="section-body">
+      <Steps steps={checkedSteps} label="Our manual checking process" />
+    </div>
+  </section>
+
+  <section class="section container" id="statuses">
+    <h2 class="section-title">What our status labels mean</h2>
+    <p class="section-sub">
+      Three labels, each a claim about sources — never a claim about the game itself.
+    </p>
+    <div class="section-body faq">
+      {statusNotes.map((note) => (
+        <div class="faq-item">
+          <div class="status-row">
+            <StatusBadge status={note.status} />
+            <strong class="status-title">{note.title}</strong>
+          </div>
+          <p class="faq-a status-body">{note.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section container" id="dates">
+    <h2 class="section-title">About our dates</h2>
+    <div class="section-body prose">
+      <p>
+        Every game page shows two kinds of dates. <strong>Last read</strong> is the day we actually
+        opened the source pages ({formatDate(SITE_LAST_READ)} for the current data). Each source’s own
+        <strong>updated/published</strong> date is shown next to it, because a page can say “active”
+        days after it was genuinely last touched. The month in each page’s headline comes from our
+        read date — never from the clock at build time, so a rebuild never silently “refreshes” the data.
+      </p>
+      <p>
+        We keep the reward text <strong>verbatim</strong> from the most recent source. When two
+        sources word the same reward differently — “4,000x Pumpkins” versus “4k Pumpkins”, or
+        “Internal” versus “infernal” — we show the newer wording and note the older one on the code’s
+        details instead of inventing a merged version.
+      </p>
+    </div>
+  </section>
+
+  <section class="section container" id="never">
+    <h2 class="section-title">What we will never do</h2>
+    <div class="section-body prose">
+      <ul>
+        <li><strong>No “tested” or “guaranteed working” claims.</strong> We have never redeemed these codes ourselves; “reported active” is the strongest thing we say.</li>
+        <li><strong>No automatic checking.</strong> Nothing on this site re-verifies codes on its own, and we won’t pretend otherwise.</li>
+        <li><strong>No invented codes or rewards.</strong> If a source didn’t print it, we don’t list it — including “leaked” codes with no citation.</li>
+        <li><strong>No Robux generators, giveaways or paid anything.</strong> No accounts, no payments, no password prompts — redeem codes only inside the game’s own UI.</li>
+        <li><strong>No pretending to be official.</strong> We’re an unofficial fan-made tracker, not affiliated with Roblox Corporation or any game developer.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section container" id="games">
+    <h2 class="section-title">The games we track</h2>
+    <p class="section-sub">
+      Three games for now, each with its own sources and its own page. Adding a game means
+      finding at least two independent sources that maintain it — we won’t pad the site with
+      games we can’t honestly follow.
+    </p>
+    <div class="section-body">
+      <RelatedGames games={GAMES} />
+    </div>
+  </section>
+
+  <section class="section container" id="about-disclaimer">
+    <div class="section-body">
+      <Disclaimer gameTitle="the games we cover" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .status-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+  }
+
+  .status-title {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .status-body {
+    border-top: 1px solid var(--line);
+    padding-top: 0.9rem;
+  }
+</style>
